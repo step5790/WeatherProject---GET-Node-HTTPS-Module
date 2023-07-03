@@ -19,10 +19,20 @@ app.get("/", function (req, res) {
     response.on("data", function (data) {
       // parse the date into JSON format
       const weatherData = JSON.parse(data);
+
       // specific parameter to return specific data from JSON
-      const temp = weatherData.data[0].weather.description;
-      console.log(temp);
+      const temp = weatherData.data[0].app_temp;
+      const descr = weatherData.data[0].weather.description;
+      const icon = weatherData.data[0].weather.icon;
+      const imgURL = "https://cdn.weatherbit.io/static/img/icons";
+
+      // send data using res.write **can have multiple write
+      res.write(`<p>The weather is currently: ${descr}</p>`);
+      res.write(`<h1>The temperature is: ${temp} degress Celcius</h1>`);
+      res.write(`<img src="${imgURL}/${icon}.png">`);
+
+      // send data using res from  app.get **can only have one response/res in one app.get (method)
+      res.send();
     });
   });
-  res.send("server is up");
 });
